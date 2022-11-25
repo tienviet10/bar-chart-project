@@ -1,13 +1,15 @@
 $("document").ready(function () {
   let drawBarArr = [];
-
-  // Change color of the bar
   let colorHashmap = {
     black: "#000000",
     pink: "#ca80ff",
     blue: "#474aff",
     default: "#739600",
   };
+  let labelColor = colorHashmap["default"];
+  let largest = 0;
+
+  // Change color of the bar
   let barColor = colorHashmap["default"];
 
   $(".bar-black").click(() => func1("black"));
@@ -104,7 +106,6 @@ $("document").ready(function () {
     drawBarArr = event;
     let ogValArr = event.split(",");
     let sum = 0;
-    let largest = 0;
 
     // Resize bars by finding the largest number in the array and finding total sum
     for (let i = 0; i < ogValArr.length; i++) {
@@ -124,7 +125,7 @@ $("document").ready(function () {
       if (element !== "") {
         $(".cols-container").append(
           '<div class="bar" style="--bar-value:' +
-            ((parseFloat(element) * 90) / largest).toString() +
+            ((parseFloat(element) * 90 - 7) / largest).toString() +
             "%;--bar-color:" +
             barColor +
             ";--bar-gap:" +
@@ -140,5 +141,37 @@ $("document").ready(function () {
         );
       }
     });
+
+    builtVerticalAxis(labelColor);
   };
+
+  function builtVerticalAxis(color) {
+    $(".inner-left-grid").empty();
+    const largestTickMark = (100 * largest) / 90;
+    for (let i = 5; i >= 1; i--) {
+      $(".inner-left-grid").append(
+        '<div class="unit" style="--color-tick-mark:' +
+          color +
+          '">' +
+          ((i * largestTickMark) / 5).toFixed(1) +
+          "</div>"
+      );
+    }
+  }
+
+  // Change label and colors
+
+  $(".label-black").click(() => func6("black"));
+  $(".label-pink").click(() => func6("pink"));
+  $(".label-blue").click(() => func6("blue"));
+  $(".label-default").click(() => func6("default"));
+
+  function func6(color) {
+    labelColor = colorHashmap[color];
+    $(".x-axis").css("color", labelColor);
+    $(".last-row-grid").css("border-top", "2px solid " + labelColor);
+    $(".bottom-right-cell-grid").css("border-top", "2px solid " + labelColor);
+    $(".left-grid").css("border-right", "2px solid " + labelColor);
+    builtVerticalAxis(labelColor);
+  }
 });

@@ -196,6 +196,28 @@ table {
   border-right: 2px solid #567000;
 }
 
+.inner-left-grid {
+  height: 100%;
+  width: 100%;
+}
+
+.unit {
+  height: 20%;
+  position: relative;
+  font-size: 1.2rem;
+  color: var(--color-tick-mark);
+  font-weight: 700;
+}
+
+.unit:after {
+  content: " ";
+  position: absolute;
+  top: 7px;
+  right: 0;
+  width: 10px;
+  border: 1px solid var(--color-tick-mark);
+}
+
 .bottom-left-cell-grid {
   grid-column: 1/2;
   grid-row: 3/4;
@@ -217,6 +239,7 @@ table {
 }
 
 .cols-container {
+  grid-row: 1/-2;
   display: flex;
   height: 100%;
   width: 100%;
@@ -260,8 +283,11 @@ table {
   padding: 15px;
   border-radius: 15px;
   border: 0;
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.06);
+  box-shadow: 4px 4px 10px rgba(86, 112, 0, 0.06);
 }
+/* .bar-data:active {
+  border: 2px solid #567000;
+} */
 
 /*----------------------------------------------------------------------------------------*/
 .dropbtn-bar {
