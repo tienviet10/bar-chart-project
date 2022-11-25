@@ -154,6 +154,27 @@ table {
   text-align: center;
   letter-spacing: 2px;
   margin-bottom: 1rem;
+  color: #739600;
+}
+
+.title-div {
+  height: 4rem;
+}
+
+.input-title {
+  font-size: 2rem;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.panel {
+  display: none;
+}
+
+.active {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .grid {
@@ -448,6 +469,104 @@ table {
 }
 
 .dropdown-position:hover .dropbtn-position {
+  background-color: #e3eacc;
+  color: #455a00;
+}
+
+/*----------------------------------------------------------------------------------------*/
+.dropbtn-title-color {
+  transition: all 0.1s ease;
+  padding: 1em 2em;
+  border: 0;
+  border-radius: 30px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  background-color: #739600;
+  color: white;
+}
+
+.dropdown-title-color {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content-title-color {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content-title-color div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content-title-color div:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-title-color:hover .dropdown-content-title-color {
+  display: block;
+}
+
+.dropdown-title-color:hover .dropbtn-title-color {
+  background-color: #e3eacc;
+  color: #455a00;
+}
+
+/*----------------------------------------------------------------------------------------*/
+.dropbtn-title-size {
+  transition: all 0.1s ease;
+  padding: 1em 2em;
+  border: 0;
+  border-radius: 30px;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  background-color: #739600;
+  color: white;
+}
+
+.dropdown-title-size {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content-title-size {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content-title-size div {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content-title-size div:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-title-size:hover .dropdown-content-title-size {
+  display: block;
+}
+
+.dropdown-title-size:hover .dropbtn-title-size {
   background-color: #e3eacc;
   color: #455a00;
 }

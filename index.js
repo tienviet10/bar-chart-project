@@ -54,6 +54,49 @@ $("document").ready(function () {
     drawBarChart(drawBarArr);
   }
 
+  // Edit Tile
+  const sizeHash = {
+    small: "2rem",
+    medium: "2.4rem",
+    large: "2.7rem",
+  };
+  let barChartTitle = "Bar Chart";
+  let titleColor = colorHashmap["default"];
+  let titleSize = sizeHash["medium"];
+  $(".title").dblclick(function () {
+    $(".title").removeClass("active");
+    $(".title-div").addClass("active");
+  });
+
+  $(".title-div").keyup(function (e) {
+    barChartTitle = e.target.value !== "" ? e.target.value : barChartTitle;
+    if (e.keyCode == 13) {
+      $(".title-div").removeClass("active");
+      $(".title").text(barChartTitle).addClass("active");
+    }
+  });
+
+  $(".title-black").click(() => func4("black"));
+  $(".title-pink").click(() => func4("pink"));
+  $(".title-blue").click(() => func4("blue"));
+  $(".title-default").click(() => func4("default"));
+
+  function func4(color) {
+    titleColor = colorHashmap[color];
+    $(".input-title").css("color", titleColor);
+    $(".title").css("color", titleColor);
+  }
+
+  $(".title-small").click(() => func5("small"));
+  $(".title-medium").click(() => func5("medium"));
+  $(".title-large").click(() => func5("large"));
+
+  function func5(size) {
+    titleSize = sizeHash[size];
+    $(".input-title").css("font-size", titleSize);
+    $(".title").css("font-size", titleSize);
+  }
+
   // Draw the bar
   $(".bar-data").keyup((e) => drawBarChart(e.target.value));
 
