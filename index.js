@@ -1,3 +1,18 @@
+let colorChosen = [
+  "#800000",
+  "#F4A460",
+  "#B8860B",
+  "#32CD32",
+  "#20B2AA",
+  "#0000CD",
+  "#9400D3",
+  "#FFDEAD",
+  "#F0E68C",
+  "#808080",
+  "#FFB6C1",
+  "#7FFFD4",
+];
+
 $("document").ready(function () {
   let drawBarArr = [];
 
@@ -144,25 +159,15 @@ $("document").ready(function () {
       convertedData.forEach((elements, index) => {
         console.log(elements);
         if (elements !== "" && elements !== []) {
-          let colorChosen = [
-            "#800000",
-            "#F4A460",
-            "#B8860B",
-            "#32CD32",
-            "#20B2AA",
-            "#0000CD",
-            "#9400D3",
-            "#FFDEAD",
-            "#F0E68C",
-            "#808080",
-            "#FFB6C1",
-            "#7FFFD4",
-          ];
           let miniBars = "";
           for (let i = 0; i < elements.length; i++) {
             //console.log(element);
             miniBars +=
-              '<div class="mini-bar" style="--bar-mini-value:' +
+              '<div class="mini-bar element-' +
+              index +
+              "-" +
+              i +
+              '" style="--bar-mini-value:' +
               (
                 (parseFloat(elements[i]) * 90 - 7 / elements.length) /
                 largest
@@ -171,7 +176,11 @@ $("document").ready(function () {
               colorChosen[i] +
               ";--bar-mini-text-position:" +
               valPosition +
-              '" ><p class="text-position">' +
+              '" ondblclick="changeMiniBarColor(' +
+              index +
+              "," +
+              i +
+              ')"><p class="text-position">' +
               parseFloat(elements[i]) +
               "</p></div>";
           }
@@ -259,3 +268,10 @@ $("document").ready(function () {
     builtVerticalAxis(labelColor);
   }
 });
+let colorWheel = colorChosen.length - 1;
+function changeMiniBarColor(index, i) {
+  let stringQuery = ".element-" + index + "-" + i;
+  $(stringQuery).css("background-color", colorChosen[colorWheel]);
+  colorWheel--;
+  colorWheel = colorWheel == -1 ? colorChosen.length - 1 : colorWheel;
+}
