@@ -1,5 +1,6 @@
 $("document").ready(function () {
   let drawBarArr = [];
+
   let colorHashmap = {
     black: "#000000",
     pink: "#ca80ff",
@@ -19,6 +20,8 @@ $("document").ready(function () {
 
   function func1(color) {
     barColor = colorHashmap[color];
+    // $(".dropbtn-bar").css("background-color", colorHashmap[color]);
+    $(".dropbtn-bar").text(color);
     drawBarChart(drawBarArr);
   }
 
@@ -36,6 +39,7 @@ $("document").ready(function () {
 
   function func2(gap) {
     barGap = gapHashmap[gap];
+    $(".dropbtn-space").text(gap);
     drawBarChart(drawBarArr);
   }
 
@@ -53,6 +57,7 @@ $("document").ready(function () {
 
   function func3(pos) {
     valPosition = valuePositionMap[pos];
+    $(".dropbtn-position").text(pos);
     drawBarChart(drawBarArr);
   }
 
@@ -87,6 +92,8 @@ $("document").ready(function () {
     titleColor = colorHashmap[color];
     $(".input-title").css("color", titleColor);
     $(".title").css("color", titleColor);
+    // $(".dropbtn-title-color").css("background-color", colorHashmap[color]);
+    $(".dropbtn-title-color").text(color);
   }
 
   $(".title-small").click(() => func5("small"));
@@ -97,52 +104,127 @@ $("document").ready(function () {
     titleSize = sizeHash[size];
     $(".input-title").css("font-size", titleSize);
     $(".title").css("font-size", titleSize);
+    $(".dropbtn-title-size").text(size);
   }
 
   // Draw the bar
   $(".bar-data").keyup((e) => drawBarChart(e.target.value));
 
   const drawBarChart = function (event) {
+    if (event === "") largest = 0;
     drawBarArr = event;
-    let ogValArr = event.split(",");
-    let sum = 0;
+    if (event.includes("[")) {
+      let temp = event.split("],");
 
-    // Resize bars by finding the largest number in the array and finding total sum
-    for (let i = 0; i < ogValArr.length; i++) {
-      let newVal = parseFloat(ogValArr[i]);
-      sum += newVal;
-      if (largest < newVal) {
-        largest = newVal;
+      let sumAllBarData = [];
+      let convertedData = [];
+      for (const i of temp) {
+        let newDataArr = i
+          .replace("[", "")
+          .replace("]", "")
+          .split(",")
+          .map((a) => parseFloat(a));
+        sumAllBarData.push(newDataArr.reduce((acc, prev) => acc + prev, 0.0));
+        convertedData.push([...newDataArr]);
       }
+
+      // Resize bars by finding the largest number in the array and finding total sum
+      for (let i = 0; i < sumAllBarData.length; i++) {
+        let newVal = parseFloat(sumAllBarData[i]);
+        if (largest < newVal) {
+          largest = newVal;
+        }
+      }
+
+      // Empty all child of grid
+      $(".cols-container").empty();
+      $(".last-row-grid").empty();
+
+      // Drawing the bar at the right size
+      convertedData.forEach((elements, index) => {
+        console.log(elements);
+        if (elements !== "" && elements !== []) {
+          let colorChosen = [
+            "#800000",
+            "#F4A460",
+            "#B8860B",
+            "#32CD32",
+            "#20B2AA",
+            "#0000CD",
+            "#9400D3",
+            "#FFDEAD",
+            "#F0E68C",
+            "#808080",
+            "#FFB6C1",
+            "#7FFFD4",
+          ];
+          let miniBars = "";
+          for (let i = 0; i < elements.length; i++) {
+            //console.log(element);
+            miniBars +=
+              '<div class="mini-bar" style="--bar-mini-value:' +
+              (
+                (parseFloat(elements[i]) * 90 - 7 / elements.length) /
+                largest
+              ).toString() +
+              "%;--bar-mini-color:" +
+              colorChosen[i] +
+              ";--bar-mini-text-position:" +
+              valPosition +
+              '" ><p class="text-position">' +
+              parseFloat(elements[i]) +
+              "</p></div>";
+          }
+          console.log(miniBars);
+          $(".cols-container").append(
+            '<div class="bar-container">' + miniBars + "</div>"
+          );
+          $(".last-row-grid").append(
+            '<div class="x-axis">' + (index + 1) + "</div>"
+          );
+        }
+      });
+
+      builtVerticalAxis(labelColor);
+    } else {
+      let ogValArr = event.split(",");
+
+      // Resize bars by finding the largest number in the array and finding total sum
+      for (let i = 0; i < ogValArr.length; i++) {
+        let newVal = parseFloat(ogValArr[i]);
+        if (largest < newVal) {
+          largest = newVal;
+        }
+      }
+
+      // Empty all child of grid
+      $(".cols-container").empty();
+      $(".last-row-grid").empty();
+
+      // Drawing the bar at the right size
+      ogValArr.forEach((element, index) => {
+        if (element !== "") {
+          $(".cols-container").append(
+            '<div class="bar" style="--bar-value:' +
+              ((parseFloat(element) * 90 - 7) / largest).toString() +
+              "%;--bar-color:" +
+              barColor +
+              ";--bar-gap:" +
+              barGap +
+              ";--bar-text-position:" +
+              valPosition +
+              '" ><p class="text-position">' +
+              parseFloat(element) +
+              "</p></div>"
+          );
+          $(".last-row-grid").append(
+            '<div class="x-axis">' + (index + 1) + "</div>"
+          );
+        }
+      });
+
+      builtVerticalAxis(labelColor);
     }
-
-    // Empty all child of grid
-    $(".cols-container").empty();
-    $(".last-row-grid").empty();
-
-    // Drawing the bar at the right size
-    ogValArr.forEach((element, index) => {
-      if (element !== "") {
-        $(".cols-container").append(
-          '<div class="bar" style="--bar-value:' +
-            ((parseFloat(element) * 90 - 7) / largest).toString() +
-            "%;--bar-color:" +
-            barColor +
-            ";--bar-gap:" +
-            barGap +
-            ";--bar-text-position:" +
-            valPosition +
-            '" ><p class="text-position">' +
-            parseFloat(element) +
-            "</p></div>"
-        );
-        $(".last-row-grid").append(
-          '<div class="x-axis">' + (index + 1) + "</div>"
-        );
-      }
-    });
-
-    builtVerticalAxis(labelColor);
   };
 
   function builtVerticalAxis(color) {
@@ -172,6 +254,8 @@ $("document").ready(function () {
     $(".last-row-grid").css("border-top", "2px solid " + labelColor);
     $(".bottom-right-cell-grid").css("border-top", "2px solid " + labelColor);
     $(".left-grid").css("border-right", "2px solid " + labelColor);
+    // $(".dropbtn-label").css("background-color", colorHashmap[color]);
+    $(".dropbtn-label").text(color);
     builtVerticalAxis(labelColor);
   }
 });

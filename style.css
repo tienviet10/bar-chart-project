@@ -260,6 +260,25 @@ table {
   color: white;
 }
 
+.bar-container {
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 2px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.mini-bar {
+  width: 100%;
+  height: var(--bar-mini-value);
+  background-color: var(--bar-mini-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: var(--bar-mini-text-position);
+  color: white;
+}
+
 .text-position {
   margin: 10px;
 }
@@ -276,6 +295,7 @@ table {
 .cell-width {
   width: 20%;
   height: 20px;
+  font-weight: bold;
 }
 
 .bar-data {
