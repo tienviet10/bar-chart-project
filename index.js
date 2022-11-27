@@ -43,49 +43,122 @@ const sizeHash = {
 
 let drawBarArr = [];
 let largest = 0;
-let labelColor = colorHashmap["default"];
-let barColor = colorHashmap["default"];
-let barGap = "2px";
-let valPosition = "start";
-let barChartTitle = "Bar Chart";
-let titleColor = colorHashmap["default"];
-let titleSize = sizeHash["medium"];
+// let labelColor = colorHashmap["default"];
+// let barColor = colorHashmap["default"];
+// let barGap = "2px";
+// let valPosition = "start";
+// let barChartTitle = "Bar Chart";
+// let titleColor = colorHashmap["default"];
+// let titleSize = sizeHash["medium"];
 let colorWheel = colorChosen.length - 1;
+let defaultOptions = {
+  labelColor: "default",
+  barColor: "default",
+  barGap: "small",
+  valPosition: "top",
+  barChartTitle: "Bar Chart",
+  titleColor: "default",
+  titleSize: sizeHash["medium"],
+  listStackColor: [],
+};
 
 $("document").ready(function () {
   // Draw the bar
-  $(".bar-data").keyup((e) => drawBarChart(e.target.value));
+  $(".bar-data").keyup((e) =>
+    drawBarChart(e.target.value, { ...defaultOptions, listStackColor: [] })
+  );
 
   // Change color of the bar
-  $(".bar-black").click(() => func1("black"));
-  $(".bar-pink").click(() => func1("pink"));
-  $(".bar-blue").click(() => func1("blue"));
-  $(".bar-default").click(() => func1("default"));
-  function func1(color) {
-    barColor = colorHashmap[color];
-    $(".dropbtn-bar").text(color);
-    drawBarChart(drawBarArr);
-  }
+  $(".bar-black").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barColor: "black",
+    })
+  );
+  $(".bar-pink").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barColor: "pink",
+    })
+  );
+  $(".bar-blue").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barColor: "blue",
+    })
+  );
+  $(".bar-default").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barColor: "default",
+    })
+  );
 
   // Change the gap between the bars
-  $(".bar-gap-small").click(() => func2("small"));
-  $(".bar-gap-medium").click(() => func2("medium"));
-  $(".bar-gap-large").click(() => func2("large"));
-  function func2(gap) {
-    barGap = gapHashmap[gap];
-    $(".dropbtn-space").text(gap);
-    drawBarChart(drawBarArr);
-  }
+  $(".bar-gap-small").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barGap: "small",
+    })
+  );
+  $(".bar-gap-medium").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barGap: "medium",
+    })
+  );
+  $(".bar-gap-large").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      barGap: "large",
+    })
+  );
 
   // Change the value position within the bars
-  $(".bar-position-top").click(() => func3("top"));
-  $(".bar-position-center").click(() => func3("center"));
-  $(".bar-position-bottom").click(() => func3("bottom"));
-  function func3(pos) {
-    valPosition = valuePositionMap[pos];
-    $(".dropbtn-position").text(pos);
-    drawBarChart(drawBarArr);
-  }
+  $(".bar-position-top").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      valPosition: "top",
+    })
+  );
+  $(".bar-position-center").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      valPosition: "center",
+    })
+  );
+  $(".bar-position-bottom").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      valPosition: "bottom",
+    })
+  );
+
+  // Change label and colors
+  $(".label-black").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      labelColor: "black",
+    })
+  );
+  $(".label-pink").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      labelColor: "pink",
+    })
+  );
+  $(".label-blue").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      labelColor: "blue",
+    })
+  );
+  $(".label-default").click(() =>
+    drawBarChart(drawBarArr, {
+      ...defaultOptions,
+      labelColor: "default",
+    })
+  );
 
   // Edit Tile
   $(".title").dblclick(function () {
@@ -94,10 +167,11 @@ $("document").ready(function () {
   });
 
   $(".title-div").keyup(function (e) {
-    barChartTitle = e.target.value !== "" ? e.target.value : barChartTitle;
+    defaultOptions.barChartTitle =
+      e.target.value !== "" ? e.target.value : defaultOptions.barChartTitle;
     if (e.keyCode == 13) {
       $(".title-div").removeClass("active");
-      $(".title").text(barChartTitle).addClass("active");
+      $(".title").text(defaultOptions.barChartTitle).addClass("active");
     }
   });
 
@@ -106,9 +180,9 @@ $("document").ready(function () {
   $(".title-blue").click(() => func4("blue"));
   $(".title-default").click(() => func4("default"));
   function func4(color) {
-    titleColor = colorHashmap[color];
-    $(".input-title").css("color", titleColor);
-    $(".title").css("color", titleColor);
+    defaultOptions.titleColor = color;
+    $(".input-title").css("color", colorHashmap[defaultOptions.titleColor]);
+    $(".title").css("color", colorHashmap[defaultOptions.titleColor]);
     $(".dropbtn-title-color").text(color);
   }
 
@@ -116,36 +190,31 @@ $("document").ready(function () {
   $(".title-medium").click(() => func5("medium"));
   $(".title-large").click(() => func5("large"));
   function func5(size) {
-    titleSize = sizeHash[size];
-    $(".input-title").css("font-size", titleSize);
-    $(".title").css("font-size", titleSize);
+    defaultOptions.titleSize = sizeHash[size];
+    $(".title").css("font-size", defaultOptions.titleSize);
     $(".dropbtn-title-size").text(size);
-  }
-
-  // Change label and colors
-  $(".label-black").click(() => func6("black"));
-  $(".label-pink").click(() => func6("pink"));
-  $(".label-blue").click(() => func6("blue"));
-  $(".label-default").click(() => func6("default"));
-  function func6(color) {
-    labelColor = colorHashmap[color];
-    $(".x-axis").css("color", labelColor);
-    $(".last-row-grid").css("border-top", "2px solid " + labelColor);
-    $(".bottom-right-cell-grid").css("border-top", "2px solid " + labelColor);
-    $(".left-grid").css("border-right", "2px solid " + labelColor);
-    $(".dropbtn-label").text(color);
-    buildVerticalAxis(labelColor);
   }
 });
 
 // Process raw data from user and draw bar chart
-function drawBarChart(event) {
+function drawBarChart(rawData, options) {
+  defaultOptions = options;
   largest = 0;
-  drawBarArr = event;
+  drawBarArr = rawData;
+
+  if (rawData.includes("[")) {
+    $(".dropdown-bar").css("display", "none");
+  } else {
+    $(".dropdown-bar").css("display", "block");
+  }
+
+  $(".dropbtn-bar").text(options.barColor);
+  $(".dropbtn-space").text(options.barGap);
+  $(".dropbtn-position").text(options.valPosition);
 
   // Check if it is a stack bar chart or just a normal bar chart
-  if (event.includes("[")) {
-    let temp = event.split("],");
+  if (rawData.includes("[")) {
+    let temp = rawData.split("],");
     let sumAllBarData = [];
     let convertedData = [];
 
@@ -154,15 +223,20 @@ function drawBarChart(event) {
         .replace("[", "")
         .replace("]", "")
         .split(",")
-        .filter((a) => a !== "")
-        .map((a) => parseFloat(a));
+        .filter((a) => a !== "");
+      newDataArr = newDataArr.map((a) => parseFloat(a));
+      defaultOptions.listStackColor.push([
+        ...newDataArr.map((a, index) => colorChosen[index]),
+      ]);
       sumAllBarData.push(newDataArr.reduce((acc, prev) => acc + prev, 0.0));
       convertedData.push([...newDataArr]);
     }
 
+    //console.log(defaultOptions.listStackColor);
+
     buildStackedBarChart(convertedData, sumAllBarData);
   } else {
-    let ogValArr = event.split(",").filter((a) => a !== "");
+    let ogValArr = rawData.split(",").filter((a) => a !== "");
 
     buildSingleBarChart(ogValArr);
   }
@@ -191,11 +265,11 @@ function buildSingleBarChart(data) {
       '<div class="bar" style="--bar-value:' +
         ((parseFloat(element) * 90 - 7) / largest).toString() +
         "%;--bar-color:" +
-        barColor +
+        colorHashmap[defaultOptions.barColor] +
         ";--bar-gap:" +
-        barGap +
+        gapHashmap[defaultOptions.barGap] +
         ";--bar-text-position:" +
-        valPosition +
+        valuePositionMap[defaultOptions.valPosition] +
         '" ><p class="text-position">' +
         parseFloat(element) +
         "</p></div>"
@@ -203,7 +277,7 @@ function buildSingleBarChart(data) {
   });
 
   buildHorizontalAxis(data.length);
-  buildVerticalAxis(labelColor);
+  buildVerticalAxis(colorHashmap[defaultOptions.labelColor]);
 }
 
 // Build stacked bar chart
@@ -229,9 +303,9 @@ function buildStackedBarChart(data, sumAllBarData) {
             largest
           ).toString() +
           "%;--bar-mini-color:" +
-          colorChosen[i] +
+          defaultOptions.listStackColor[index][i] +
           ";--bar-mini-text-position:" +
-          valPosition +
+          valuePositionMap[defaultOptions.valPosition] +
           '" ondblclick="changeMiniBarColor(' +
           index +
           "," +
@@ -243,7 +317,7 @@ function buildStackedBarChart(data, sumAllBarData) {
 
       $(".cols-container").append(
         '<div class="bar-container" style="--bar-mini-gap:' +
-          barGap +
+          gapHashmap[defaultOptions.barGap] +
           '">' +
           miniBars +
           "</div>"
@@ -252,7 +326,7 @@ function buildStackedBarChart(data, sumAllBarData) {
   });
 
   buildHorizontalAxis(data.length);
-  buildVerticalAxis(labelColor);
+  buildVerticalAxis(colorHashmap[defaultOptions.labelColor]);
 }
 
 // Build y-axis
@@ -276,17 +350,32 @@ function buildHorizontalAxis(numberIndexes) {
   for (let i = 0; i < numberIndexes; i++) {
     $(".last-row-grid").append(
       '<div class="x-axis" style="--x-axis-color:' +
-        labelColor +
+        colorHashmap[defaultOptions.labelColor] +
         '">' +
         (i + 1) +
         "</div>"
     );
   }
+
+  $(".x-axis").css("color", colorHashmap[defaultOptions.labelColor]);
+  $(".last-row-grid").css(
+    "border-top",
+    "2px solid " + colorHashmap[defaultOptions.labelColor]
+  );
+  $(".bottom-right-cell-grid").css(
+    "border-top",
+    "2px solid " + colorHashmap[defaultOptions.labelColor]
+  );
+  $(".left-grid").css(
+    "border-right",
+    "2px solid " + colorHashmap[defaultOptions.labelColor]
+  );
+  $(".dropbtn-label").text(defaultOptions.labelColor);
 }
 
 function changeMiniBarColor(index, i) {
-  let stringQuery = ".element-" + index + "-" + i;
-  $(stringQuery).css("background-color", colorChosen[colorWheel]);
+  defaultOptions.listStackColor[index][i] = colorChosen[colorWheel];
+  drawBarChart(drawBarArr, defaultOptions);
   colorWheel--;
   colorWheel = colorWheel == -1 ? colorChosen.length - 1 : colorWheel;
 }
