@@ -249,7 +249,7 @@ table {
 
 .bar {
   align-self: flex-end;
-  width: 100px;
+  width: var(--bar-width);
   height: var(--bar-value);
   margin: 0 var(--bar-gap);
   background-color: var(--bar-color);
@@ -261,7 +261,7 @@ table {
 }
 
 .bar-container {
-  width: 100px;
+  width: var(--bar-mini-width);
   display: flex;
   flex-direction: column;
   margin: 0 var(--bar-mini-gap);
@@ -284,8 +284,8 @@ table {
 }
 
 .x-axis {
-  width: 100px;
-  margin: 4px 2px;
+  width: var(--x-axis-width);
+  margin: 4px var(--x-axis-gap);
   font-size: 1.5rem;
   color: var(--x-axis-color);
   font-weight: 700;

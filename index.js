@@ -26,9 +26,9 @@ const colorHashmap = {
   default: "#739600",
 };
 const gapHashmap = {
-  small: "2px",
-  medium: "6px",
-  large: "10px",
+  small: 10,
+  medium: 17,
+  large: 25,
 };
 const valuePositionMap = {
   top: "start",
@@ -43,13 +43,6 @@ const sizeHash = {
 
 let drawBarArr = [];
 let largest = 0;
-// let labelColor = colorHashmap["default"];
-// let barColor = colorHashmap["default"];
-// let barGap = "2px";
-// let valPosition = "start";
-// let barChartTitle = "Bar Chart";
-// let titleColor = colorHashmap["default"];
-// let titleSize = sizeHash["medium"];
 let colorWheel = colorChosen.length - 1;
 let defaultOptions = {
   labelColor: "default",
@@ -232,14 +225,21 @@ function drawBarChart(rawData, options) {
       convertedData.push([...newDataArr]);
     }
 
-    //console.log(defaultOptions.listStackColor);
-
-    buildStackedBarChart(convertedData, sumAllBarData);
+    let [barWidth, barGap] = calculateBarWidthAndGap(sumAllBarData);
+    buildStackedBarChart(convertedData, sumAllBarData, barWidth, barGap);
   } else {
     let ogValArr = rawData.split(",").filter((a) => a !== "");
+    let [barWidth, barGap] = calculateBarWidthAndGap(ogValArr);
 
-    buildSingleBarChart(ogValArr);
+    buildSingleBarChart(ogValArr, barWidth, barGap);
   }
+}
+
+//Calculate bar width and gap function
+function calculateBarWidthAndGap(data) {
+  let barWidth = (100 - gapHashmap[defaultOptions.barGap]) / data.length;
+  let barGap = gapHashmap[defaultOptions.barGap] / (data.length - 1) / 2;
+  return [barWidth, barGap];
 }
 
 // Finding the largest value in the column/bar
@@ -253,7 +253,7 @@ function setLargestValue(values) {
 }
 
 // Build single bar chart
-function buildSingleBarChart(data) {
+function buildSingleBarChart(data, barWidth, barGap) {
   setLargestValue(data);
 
   // Empty all child of grid
@@ -267,8 +267,10 @@ function buildSingleBarChart(data) {
         "%;--bar-color:" +
         colorHashmap[defaultOptions.barColor] +
         ";--bar-gap:" +
-        gapHashmap[defaultOptions.barGap] +
-        ";--bar-text-position:" +
+        barGap +
+        "%;--bar-width:" +
+        barWidth +
+        "%;--bar-text-position:" +
         valuePositionMap[defaultOptions.valPosition] +
         '" ><p class="text-position">' +
         parseFloat(element) +
@@ -276,12 +278,12 @@ function buildSingleBarChart(data) {
     );
   });
 
-  buildHorizontalAxis(data.length);
+  buildHorizontalAxis(data.length, barWidth, barGap);
   buildVerticalAxis(colorHashmap[defaultOptions.labelColor]);
 }
 
 // Build stacked bar chart
-function buildStackedBarChart(data, sumAllBarData) {
+function buildStackedBarChart(data, sumAllBarData, barWidth, barGap) {
   setLargestValue(sumAllBarData);
 
   // Empty all child of grid
@@ -317,15 +319,17 @@ function buildStackedBarChart(data, sumAllBarData) {
 
       $(".cols-container").append(
         '<div class="bar-container" style="--bar-mini-gap:' +
-          gapHashmap[defaultOptions.barGap] +
-          '">' +
+          barGap +
+          "%;--bar-mini-width:" +
+          barWidth +
+          '%">' +
           miniBars +
           "</div>"
       );
     }
   });
 
-  buildHorizontalAxis(data.length);
+  buildHorizontalAxis(data.length, barWidth, barGap);
   buildVerticalAxis(colorHashmap[defaultOptions.labelColor]);
 }
 
@@ -345,13 +349,17 @@ function buildVerticalAxis(color) {
 }
 
 // Build x-axis
-function buildHorizontalAxis(numberIndexes) {
+function buildHorizontalAxis(numberIndexes, xWidth, xGap) {
   $(".last-row-grid").empty();
   for (let i = 0; i < numberIndexes; i++) {
     $(".last-row-grid").append(
       '<div class="x-axis" style="--x-axis-color:' +
         colorHashmap[defaultOptions.labelColor] +
-        '">' +
+        ";--x-axis-width:" +
+        xWidth +
+        "%;--x-axis-gap:" +
+        xGap +
+        '%">' +
         (i + 1) +
         "</div>"
     );
@@ -373,6 +381,7 @@ function buildHorizontalAxis(numberIndexes) {
   $(".dropbtn-label").text(defaultOptions.labelColor);
 }
 
+// Double click to change mini bar color
 function changeMiniBarColor(index, i) {
   defaultOptions.listStackColor[index][i] = colorChosen[colorWheel];
   drawBarChart(drawBarArr, defaultOptions);
