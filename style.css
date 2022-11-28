@@ -212,10 +212,16 @@ table {
 .unit:after {
   content: " ";
   position: absolute;
-  top: 7px;
+  top: 0px;
   right: 0;
   width: 10px;
   border: 1px solid var(--color-tick-mark);
+}
+
+.unit-text {
+  position: absolute;
+  top: -8px;
+  right: 20px;
 }
 
 .bottom-left-cell-grid {
@@ -280,13 +286,14 @@ table {
 }
 
 .text-position {
-  margin: 10px;
+  font-size: 1.3rem;
+  margin: 0.5rem 0;
 }
 
 .x-axis {
   width: var(--x-axis-width);
   margin: 4px var(--x-axis-gap);
-  font-size: 1.5rem;
+  font-size: var(--x-axis-font);
   color: var(--x-axis-color);
   font-weight: 700;
   /* border-radius: 0 2 2 0; */
@@ -537,6 +544,7 @@ table {
 .dropdown-title-color {
   position: relative;
   display: inline-block;
+  width: 90px;
 }
 
 .dropdown-content-title-color {
@@ -581,6 +589,7 @@ table {
   font-size: 14px;
   background-color: #739600;
   color: white;
+  width: 100px;
 }
 
 .dropdown-title-size {

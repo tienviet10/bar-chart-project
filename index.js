@@ -207,6 +207,7 @@ function drawBarChart(rawData, options) {
 
   // Check if it is a stack bar chart or just a normal bar chart
   if (rawData.includes("[")) {
+    // Build a stack bar chart
     let temp = rawData.split("],");
     let sumAllBarData = [];
     let convertedData = [];
@@ -228,6 +229,7 @@ function drawBarChart(rawData, options) {
     let [barWidth, barGap] = calculateBarWidthAndGap(sumAllBarData);
     buildStackedBarChart(convertedData, sumAllBarData, barWidth, barGap);
   } else {
+    // Build a normal bar chart
     let ogValArr = rawData.split(",").filter((a) => a !== "");
     let [barWidth, barGap] = calculateBarWidthAndGap(ogValArr);
 
@@ -237,8 +239,12 @@ function drawBarChart(rawData, options) {
 
 //Calculate bar width and gap function
 function calculateBarWidthAndGap(data) {
-  let barWidth = (100 - gapHashmap[defaultOptions.barGap]) / data.length;
+  let barWidth =
+    data.length <= 2
+      ? 30
+      : (100 - gapHashmap[defaultOptions.barGap]) / data.length;
   let barGap = gapHashmap[defaultOptions.barGap] / (data.length - 1) / 2;
+
   return [barWidth, barGap];
 }
 
@@ -246,8 +252,8 @@ function calculateBarWidthAndGap(data) {
 function setLargestValue(values) {
   for (let i = 0; i < values.length; i++) {
     let newVal = parseFloat(values[i]);
-    if (largest < newVal) {
-      largest = newVal;
+    if (largest < newVal * 1.2) {
+      largest = newVal * 1.2;
     }
   }
 }
@@ -263,7 +269,7 @@ function buildSingleBarChart(data, barWidth, barGap) {
   data.forEach((element) => {
     $(".cols-container").append(
       '<div class="bar" style="--bar-value:' +
-        ((parseFloat(element) * 90 - 7) / largest).toString() +
+        ((parseFloat(element) * 100) / largest).toString() +
         "%;--bar-color:" +
         colorHashmap[defaultOptions.barColor] +
         ";--bar-gap:" +
@@ -300,10 +306,7 @@ function buildStackedBarChart(data, sumAllBarData, barWidth, barGap) {
           "-" +
           i +
           '" style="--bar-mini-value:' +
-          (
-            (parseFloat(elements[i]) * 90 - 7 / elements.length) /
-            largest
-          ).toString() +
+          ((parseFloat(elements[i]) * 100) / largest).toString() +
           "%;--bar-mini-color:" +
           defaultOptions.listStackColor[index][i] +
           ";--bar-mini-text-position:" +
@@ -336,20 +339,22 @@ function buildStackedBarChart(data, sumAllBarData, barWidth, barGap) {
 // Build y-axis
 function buildVerticalAxis(color) {
   $(".inner-left-grid").empty();
-  const largestTickMark = (100 * largest) / 90;
+  // const largestTickMark = (100 * largest) / 90;
   for (let i = 5; i >= 1; i--) {
     $(".inner-left-grid").append(
       '<div class="unit" style="--color-tick-mark:' +
         color +
-        '">' +
-        ((i * largestTickMark) / 5).toFixed(1) +
-        "</div>"
+        '"><div class="unit-text">' +
+        ((i * largest) / 5).toFixed(1) +
+        "</div></div>"
     );
   }
 }
 
 // Build x-axis
 function buildHorizontalAxis(numberIndexes, xWidth, xGap) {
+  let calculatedFont = numberIndexes > 20 ? -0.5 * numberIndexes + 2.075 : 1.5;
+
   $(".last-row-grid").empty();
   for (let i = 0; i < numberIndexes; i++) {
     $(".last-row-grid").append(
@@ -359,7 +364,9 @@ function buildHorizontalAxis(numberIndexes, xWidth, xGap) {
         xWidth +
         "%;--x-axis-gap:" +
         xGap +
-        '%">' +
+        "%;--x-axis-font:" +
+        calculatedFont +
+        'rem">' +
         (i + 1) +
         "</div>"
     );
