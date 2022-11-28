@@ -49,7 +49,7 @@ let defaultOptions = {
   barColor: "default",
   barGap: "small",
   valPosition: "top",
-  barChartTitle: "Bar Chart",
+  barChartTitle: '"Double Click" Title',
   titleColor: "default",
   titleSize: sizeHash["medium"],
   listStackColor: [],
@@ -278,7 +278,11 @@ function buildSingleBarChart(data, barWidth, barGap) {
         barWidth +
         "%;--bar-text-position:" +
         valuePositionMap[defaultOptions.valPosition] +
-        '" ><p class="text-position">' +
+        '" ><p class="text-position"  style="--bar-value-color:' +
+        (defaultOptions.labelColor === "default"
+          ? "#FFFFFF"
+          : colorHashmap[defaultOptions.labelColor]) +
+        '">' +
         parseFloat(element) +
         "</p></div>"
     );
@@ -315,7 +319,11 @@ function buildStackedBarChart(data, sumAllBarData, barWidth, barGap) {
           index +
           "," +
           i +
-          ')"><p class="text-position">' +
+          ')"><p class="text-position" style="--bar-value-color:' +
+          (defaultOptions.labelColor === "default"
+            ? "#FFFFFF"
+            : colorHashmap[defaultOptions.labelColor]) +
+          '">' +
           parseFloat(elements[i]) +
           "</p></div>";
       }

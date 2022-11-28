@@ -182,7 +182,6 @@ table {
   max-width: 95%;
   margin: auto;
   display: grid;
-  /* background-color: aqua; */
   grid-template-columns: 1fr minmax(100px, 11fr) 1fr;
   grid-template-rows: 1fr minmax(100px, 11fr) 1fr;
 }
@@ -288,6 +287,7 @@ table {
 .text-position {
   font-size: 1.3rem;
   margin: 0.5rem 0;
+  color: var(--bar-value-color);
 }
 
 .x-axis {
@@ -296,7 +296,6 @@ table {
   font-size: var(--x-axis-font);
   color: var(--x-axis-color);
   font-weight: 700;
-  /* border-radius: 0 2 2 0; */
 }
 
 .cell-width {
@@ -312,9 +311,6 @@ table {
   border: 0;
   box-shadow: 4px 4px 10px rgba(86, 112, 0, 0.06);
 }
-/* .bar-data:active {
-  border: 2px solid #567000;
-} */
 
 /*----------------------------------------------------------------------------------------*/
 .dropbtn-bar {
